@@ -1,0 +1,677 @@
+class Dino {
+	field int x;
+	field int currentHeight;
+	field int jumpStrength;
+	field int weight;
+		field int memAddr;
+
+	field boolean jumping;
+	field boolean goingUp;
+	field int currentJumpSpeed;
+
+	field int GROUND_HEIGHT;
+	field int DINO_HEIGHT;
+	field int DINO_WIDTH;
+
+	constructor Dino new(int startX, int groundHeight, int jStrength, int weight_){
+		let GROUND_HEIGHT = groundHeight;
+		let DINO_HEIGHT = 63;
+		let DINO_WIDTH = 63;
+
+		let x = startX;
+		let currentHeight = groundHeight - DINO_HEIGHT - 1;
+		let jumpStrength = jStrength;
+		let weight = weight_;
+
+		let jumping = false;
+		let goingUp = false;
+		let currentJumpSpeed = 0;
+
+		do draw();
+
+		return this;
+	}
+
+	method void dispose(){
+		do Memory.deAlloc(this);
+		return;
+	}
+
+	method void draw() {
+    let memAddr = 16384 + Utility.xyToScreenMap(x, currentHeight);
+
+    if ((memAddr > 16383) & (memAddr < 24576)) {
+do Memory.poke(memAddr + 0, 0);
+    do Memory.poke(memAddr + 1, 0);
+    do Memory.poke(memAddr + 2, 0);
+    do Memory.poke(memAddr + 3, 0);
+    do Memory.poke(memAddr + 32, 0);
+    do Memory.poke(memAddr + 33, 0);
+    do Memory.poke(memAddr + 34, 0);
+    do Memory.poke(memAddr + 35, 32736);
+    do Memory.poke(memAddr + 64, 0);
+    do Memory.poke(memAddr + 65, 0);
+    do Memory.poke(memAddr + 66, 0);
+    do Memory.poke(memAddr + 67, 24608);
+    do Memory.poke(memAddr + 96, 0);
+    do Memory.poke(memAddr + 97, 0);
+    do Memory.poke(memAddr + 98, 0);
+    do Memory.poke(memAddr + 99, 24624);
+    do Memory.poke(memAddr + 128, 0);
+    do Memory.poke(memAddr + 129, -256);
+    do Memory.poke(memAddr + 130, 4095);
+    do Memory.poke(memAddr + 131, 24592);
+    do Memory.poke(memAddr + 160, 0);
+    do Memory.poke(memAddr + 161, -256);
+    do Memory.poke(memAddr + 162, 4095);
+    do Memory.poke(memAddr + 163, 24592);
+    do Memory.poke(memAddr + 192, 0);
+    do Memory.poke(memAddr + 193, -256);
+    do Memory.poke(memAddr + 194, 4095);
+    do Memory.poke(memAddr + 195, 24592);
+    do Memory.poke(memAddr + 224, 0);
+    do Memory.poke(memAddr + 225, -256);
+    do Memory.poke(memAddr + 226, 4095);
+    do Memory.poke(memAddr + 227, 24592);
+    do Memory.poke(memAddr + 256, 0);
+    do Memory.poke(memAddr + 257, -16);
+    do Memory.poke(memAddr + 258, -1);
+    do Memory.poke(memAddr + 259, 24703);
+    do Memory.poke(memAddr + 288, 0);
+    do Memory.poke(memAddr + 289, -16);
+    do Memory.poke(memAddr + 290, -1);
+    do Memory.poke(memAddr + 291, 24703);
+    do Memory.poke(memAddr + 320, 0);
+    do Memory.poke(memAddr + 321, -16);
+    do Memory.poke(memAddr + 322, -1);
+    do Memory.poke(memAddr + 323, 24703); 
+    do Memory.poke(memAddr + 352, 0);
+    do Memory.poke(memAddr + 353, -16);
+    do Memory.poke(memAddr + 354, -1);
+    do Memory.poke(memAddr + 355, 24703);
+    do Memory.poke(memAddr + 384, 0);
+    do Memory.poke(memAddr + 385, -16);
+    do Memory.poke(memAddr + 386, -1);
+    do Memory.poke(memAddr + 387, 32383);
+    do Memory.poke(memAddr + 416, 0);
+    do Memory.poke(memAddr + 417, -16);
+    do Memory.poke(memAddr + 418, 20224);
+    do Memory.poke(memAddr + 419, 25592);
+    do Memory.poke(memAddr + 448, 0);
+    do Memory.poke(memAddr + 449, -16);
+    do Memory.poke(memAddr + 450, 20224);
+    do Memory.poke(memAddr + 451, 24584);
+    do Memory.poke(memAddr + 480, 0);
+    do Memory.poke(memAddr + 481, 8176);
+    do Memory.poke(memAddr + 482, -12544);
+    do Memory.poke(memAddr + 483, 24607);
+    do Memory.poke(memAddr + 512, 0);
+    do Memory.poke(memAddr + 513, 7198);
+    do Memory.poke(memAddr + 514, 3840);
+    do Memory.poke(memAddr + 515, 24600);
+    do Memory.poke(memAddr + 544, 0);
+    do Memory.poke(memAddr + 545, 7710);
+    do Memory.poke(memAddr + 546, 3840);
+    do Memory.poke(memAddr + 547, 24592);
+    do Memory.poke(memAddr + 576, 0);
+    do Memory.poke(memAddr + 577, 7710);
+    do Memory.poke(memAddr + 578, 3840);
+    do Memory.poke(memAddr + 579, 26608);
+    do Memory.poke(memAddr + 608, 0);
+    do Memory.poke(memAddr + 609, -482);
+    do Memory.poke(memAddr + 610, 32512);
+    do Memory.poke(memAddr + 611, 27648);
+    do Memory.poke(memAddr + 640, 0);
+    do Memory.poke(memAddr + 641, -482);
+    do Memory.poke(memAddr + 642, 30720);
+    do Memory.poke(memAddr + 643, 27648);
+    do Memory.poke(memAddr + 672, 0);
+    do Memory.poke(memAddr + 673, -482);
+    do Memory.poke(memAddr + 674, 30720);
+    do Memory.poke(memAddr + 675, 29696);
+    do Memory.poke(memAddr + 704, 0);
+    do Memory.poke(memAddr + 705, -482);
+    do Memory.poke(memAddr + 706, 30720);
+    do Memory.poke(memAddr + 707, 15360);
+    do Memory.poke(memAddr + 736, 0);
+    do Memory.poke(memAddr + 737, 510);
+    do Memory.poke(memAddr + 738, -256);
+    do Memory.poke(memAddr + 739, 1023);
+    do Memory.poke(memAddr + 768, 0);
+    do Memory.poke(memAddr + 769, 510);
+    do Memory.poke(memAddr + 770, -256);
+    do Memory.poke(memAddr + 771, 1023);    
+    do Memory.poke(memAddr + 512, 0);
+    do Memory.poke(memAddr + 513, 7198);
+    do Memory.poke(memAddr + 514, 3840);
+    do Memory.poke(memAddr + 515, 24600);
+    do Memory.poke(memAddr + 544, 0);
+    do Memory.poke(memAddr + 545, 7710);
+    do Memory.poke(memAddr + 546, 3840);
+    do Memory.poke(memAddr + 547, 24592);
+    do Memory.poke(memAddr + 576, 0);
+    do Memory.poke(memAddr + 577, 7710);
+    do Memory.poke(memAddr + 578, 3840);
+    do Memory.poke(memAddr + 579, 26608);
+    do Memory.poke(memAddr + 608, 0);
+    do Memory.poke(memAddr + 609, -482);
+    do Memory.poke(memAddr + 610, 32512);
+    do Memory.poke(memAddr + 611, 27648);
+    do Memory.poke(memAddr + 640, 0);
+    do Memory.poke(memAddr + 641, -482);
+    do Memory.poke(memAddr + 642, 30720);
+    do Memory.poke(memAddr + 643, 27648);
+    do Memory.poke(memAddr + 672, 0); 
+    do Memory.poke(memAddr + 673, -482);
+    do Memory.poke(memAddr + 674, 30720);
+    do Memory.poke(memAddr + 675, 29696);
+    do Memory.poke(memAddr + 704, 0);
+    do Memory.poke(memAddr + 705, -482);
+    do Memory.poke(memAddr + 706, 30720);
+    do Memory.poke(memAddr + 707, 15360);
+    do Memory.poke(memAddr + 736, 0);
+    do Memory.poke(memAddr + 737, 510);
+    do Memory.poke(memAddr + 738, -256);
+    do Memory.poke(memAddr + 739, 1023);
+    do Memory.poke(memAddr + 768, 0);
+    do Memory.poke(memAddr + 769, 510);
+    do Memory.poke(memAddr + 770, -256);
+    do Memory.poke(memAddr + 771, 1023);
+    do Memory.poke(memAddr + 800, 0);
+    do Memory.poke(memAddr + 801, 510);
+    do Memory.poke(memAddr + 802, -256);
+    do Memory.poke(memAddr + 803, 1023);
+    do Memory.poke(memAddr + 832, 0);
+    do Memory.poke(memAddr + 833, 768);
+    do Memory.poke(memAddr + 834, -256);
+    do Memory.poke(memAddr + 835, 255);
+    do Memory.poke(memAddr + 864, 0);
+    do Memory.poke(memAddr + 865, 768);
+    do Memory.poke(memAddr + 866, 0);
+    do Memory.poke(memAddr + 867, 200);
+    do Memory.poke(memAddr + 896, 0);
+    do Memory.poke(memAddr + 897, 768);
+    do Memory.poke(memAddr + 898, 0);
+    do Memory.poke(memAddr + 899, 232);
+    do Memory.poke(memAddr + 928, 0);
+    do Memory.poke(memAddr + 929, 768);
+    do Memory.poke(memAddr + 930, 0);
+    do Memory.poke(memAddr + 931, 120);
+    do Memory.poke(memAddr + 960, -2048);
+    do Memory.poke(memAddr + 961, -1);
+    do Memory.poke(memAddr + 962, -1);
+    do Memory.poke(memAddr + 963, 31);
+    do Memory.poke(memAddr + 992, 7168);
+    do Memory.poke(memAddr + 993, -1015);
+    do Memory.poke(memAddr + 994, -1311);
+    do Memory.poke(memAddr + 995, 12);
+    do Memory.poke(memAddr + 1024, 1536);
+    do Memory.poke(memAddr + 1025, -2048);
+    do Memory.poke(memAddr + 1026, -2047);
+    do Memory.poke(memAddr + 1027, 5);
+    do Memory.poke(memAddr + 1056, 1792);
+    do Memory.poke(memAddr + 1057, -1024);
+    do Memory.poke(memAddr + 1058, -2017);
+    do Memory.poke(memAddr + 1059, 7);
+    do Memory.poke(memAddr + 1088, 896);
+    do Memory.poke(memAddr + 1089, -1024);
+    do Memory.poke(memAddr + 1090, -2017);
+    do Memory.poke(memAddr + 1091, 14343);
+    do Memory.poke(memAddr + 1120, 448);
+    do Memory.poke(memAddr + 1121, -1024);
+    do Memory.poke(memAddr + 1122, -8161);
+    do Memory.poke(memAddr + 1123, 31751);
+    do Memory.poke(memAddr + 1152, 1728);
+    do Memory.poke(memAddr + 1153, -2048);
+    do Memory.poke(memAddr + 1154, -8161);
+    do Memory.poke(memAddr + 1155, 25607);
+    do Memory.poke(memAddr + 1184, 2040);
+    do Memory.poke(memAddr + 1185, 16384);
+    do Memory.poke(memAddr + 1186, -4257);
+    do Memory.poke(memAddr + 1187, 27655);
+    do Memory.poke(memAddr + 1216, 1084);
+    do Memory.poke(memAddr + 1217, 16384);
+    do Memory.poke(memAddr + 1218, -1);
+    do Memory.poke(memAddr + 1219, 27655);
+    do Memory.poke(memAddr + 1248, 1028);
+    do Memory.poke(memAddr + 1249, 16384);
+    do Memory.poke(memAddr + 1250, -1);
+    do Memory.poke(memAddr + 1251, 27655);
+    do Memory.poke(memAddr + 1280, 15364);
+    do Memory.poke(memAddr + 1281, -16384);
+    do Memory.poke(memAddr + 1282, -1);
+    do Memory.poke(memAddr + 1283, 25607);
+    do Memory.poke(memAddr + 1312, -8188);
+    do Memory.poke(memAddr + 1313, -1537);
+    do Memory.poke(memAddr + 1314, -1);
+    do Memory.poke(memAddr + 1315, 27663);
+    do Memory.poke(memAddr + 1344, 12292);
+    do Memory.poke(memAddr + 1345, -3074);
+    do Memory.poke(memAddr + 1346, -225);
+    do Memory.poke(memAddr + 1347, 26616);
+    do Memory.poke(memAddr + 1376, 4100);
+    do Memory.poke(memAddr + 1377, -2);
+    do Memory.poke(memAddr + 1378, -225);
+    do Memory.poke(memAddr + 1379, 24824);
+    do Memory.poke(memAddr + 1408, 4100);
+    do Memory.poke(memAddr + 1409, -2);
+    do Memory.poke(memAddr + 1410, -225);
+    do Memory.poke(memAddr + 1411, 24824);
+    do Memory.poke(memAddr + 1440, 7800);
+    do Memory.poke(memAddr + 1441, -2);
+    do Memory.poke(memAddr + 1442, -1);
+    do Memory.poke(memAddr + 1443, 24831);
+    do Memory.poke(memAddr + 1472, -7616);
+    do Memory.poke(memAddr + 1473, -1);
+    do Memory.poke(memAddr + 1474, -1);
+    do Memory.poke(memAddr + 1475, 24831);
+    do Memory.poke(memAddr + 1504, -24000);
+    do Memory.poke(memAddr + 1505, -1);
+    do Memory.poke(memAddr + 1506, -1);
+    do Memory.poke(memAddr + 1507, 24831);
+    do Memory.poke(memAddr + 1536, -23616);
+    do Memory.poke(memAddr + 1538, -1);
+    do Memory.poke(memAddr + 1539, 24831);
+    do Memory.poke(memAddr + 1568, -24576);
+    do Memory.poke(memAddr + 1569, -1);
+    do Memory.poke(memAddr + 1570, -1);
+    do Memory.poke(memAddr + 1571, 24831);
+    do Memory.poke(memAddr + 1600, -17408);
+    do Memory.poke(memAddr + 1601, -1);
+    do Memory.poke(memAddr + 1602, -1);
+    do Memory.poke(memAddr + 1603, 24831);
+    do Memory.poke(memAddr + 1632, 1536);
+    do Memory.poke(memAddr + 1633, -8);
+    do Memory.poke(memAddr + 1634, -1);
+    do Memory.poke(memAddr + 1635, 24831);
+    do Memory.poke(memAddr + 1664, 768);
+    do Memory.poke(memAddr + 1665, -8);
+    do Memory.poke(memAddr + 1666, -1);
+    do Memory.poke(memAddr + 1667, 32767);
+    do Memory.poke(memAddr + 1696, -32384);
+    do Memory.poke(memAddr + 1697, -1);
+    do Memory.poke(memAddr + 1698, 8191);
+    do Memory.poke(memAddr + 1699, 0);
+    do Memory.poke(memAddr + 1728, -32640);
+    do Memory.poke(memAddr + 1729, -1);
+    do Memory.poke(memAddr + 1730, 4095);
+    do Memory.poke(memAddr + 1731, 0);
+    do Memory.poke(memAddr + 1760, -32576);
+    do Memory.poke(memAddr + 1761, -1);
+    do Memory.poke(memAddr + 1762, 4095);
+    do Memory.poke(memAddr + 1763, 0);
+    do Memory.poke(memAddr + 1792, -448);
+    do Memory.poke(memAddr + 1793, -1);
+    do Memory.poke(memAddr + 1794, 2047);
+    do Memory.poke(memAddr + 1795, 0);
+    do Memory.poke(memAddr + 1824, 576);
+    do Memory.poke(memAddr + 1825, -2);
+    do Memory.poke(memAddr + 1826, 3);
+    do Memory.poke(memAddr + 1827, 0);
+    do Memory.poke(memAddr + 1856, 576);
+    do Memory.poke(memAddr + 1857, -2);
+    do Memory.poke(memAddr + 1858, 1);
+    do Memory.poke(memAddr + 1859, 0);
+    do Memory.poke(memAddr + 1888, 832);
+    do Memory.poke(memAddr + 1889, -2);
+    do Memory.poke(memAddr + 1890, 1);
+    do Memory.poke(memAddr + 1891, 0);
+    do Memory.poke(memAddr + 1920, 448);
+    do Memory.poke(memAddr + 1921, 0);
+    do Memory.poke(memAddr + 1922, 0);
+    do Memory.poke(memAddr + 1923, 0);
+    do Memory.poke(memAddr + 1952, 0);
+    do Memory.poke(memAddr + 1953, 0);
+    do Memory.poke(memAddr + 1954, 0);
+    do Memory.poke(memAddr + 1955, 0);
+
+
+    }
+
+    return;
+}
+
+method void erase() {
+    var int memAddr;
+    let memAddr = 16384 + Utility.xyToScreenMap(x, currentHeight);
+
+    if ((memAddr > 16383) & (memAddr < 24576)) {
+        do Memory.poke(memAddr + 0, 0);
+        do Memory.poke(memAddr + 1, 0);
+        do Memory.poke(memAddr + 2, 0);
+        do Memory.poke(memAddr + 3, 0);
+        do Memory.poke(memAddr + 32, 0);
+        do Memory.poke(memAddr + 33, 0);
+        do Memory.poke(memAddr + 34, 0);
+        do Memory.poke(memAddr + 35, 0);
+        do Memory.poke(memAddr + 64, 0);
+        do Memory.poke(memAddr + 65, 0);
+        do Memory.poke(memAddr + 66, 0);
+        do Memory.poke(memAddr + 67, 0);
+        do Memory.poke(memAddr + 96, 0);
+        do Memory.poke(memAddr + 97, 0);
+        do Memory.poke(memAddr + 98, 0);
+        do Memory.poke(memAddr + 99, 0);
+        do Memory.poke(memAddr + 128, 0);
+        do Memory.poke(memAddr + 129, 0);
+        do Memory.poke(memAddr + 130, 0);
+        do Memory.poke(memAddr + 131, 0);
+        do Memory.poke(memAddr + 160, 0);
+        do Memory.poke(memAddr + 161, 0);
+        do Memory.poke(memAddr + 162, 0);
+        do Memory.poke(memAddr + 163, 0);
+        do Memory.poke(memAddr + 192, 0);
+        do Memory.poke(memAddr + 193, 0);
+        do Memory.poke(memAddr + 194, 0);
+        do Memory.poke(memAddr + 195, 0);
+        do Memory.poke(memAddr + 224, 0);
+        do Memory.poke(memAddr + 225, 0);
+        do Memory.poke(memAddr + 226, 0);
+        do Memory.poke(memAddr + 227, 0);
+        do Memory.poke(memAddr + 256, 0);
+        do Memory.poke(memAddr + 257, 0);
+        do Memory.poke(memAddr + 258, 0);
+        do Memory.poke(memAddr + 259, 0);
+        do Memory.poke(memAddr + 288, 0);
+        do Memory.poke(memAddr + 289, 0);
+        do Memory.poke(memAddr + 290, 0);
+        do Memory.poke(memAddr + 291, 0);
+        do Memory.poke(memAddr + 320, 0);
+        do Memory.poke(memAddr + 321, 0);
+        do Memory.poke(memAddr + 322, 0);
+        do Memory.poke(memAddr + 323, 0);
+        do Memory.poke(memAddr + 352, 0);
+        do Memory.poke(memAddr + 353, 0);
+        do Memory.poke(memAddr + 354, 0);
+        do Memory.poke(memAddr + 355, 0);
+        do Memory.poke(memAddr + 384, 0);
+        do Memory.poke(memAddr + 385, 0);
+        do Memory.poke(memAddr + 386, 0);
+        do Memory.poke(memAddr + 387, 0);
+        do Memory.poke(memAddr + 416, 0);
+        do Memory.poke(memAddr + 417, 0);
+        do Memory.poke(memAddr + 418, 0);
+        do Memory.poke(memAddr + 419, 0);
+        do Memory.poke(memAddr + 448, 0);
+        do Memory.poke(memAddr + 449, 0);
+        do Memory.poke(memAddr + 450, 0);
+        do Memory.poke(memAddr + 451, 0);
+        do Memory.poke(memAddr + 480, 0);
+        do Memory.poke(memAddr + 481, 0);
+        do Memory.poke(memAddr + 482, 0);
+        do Memory.poke(memAddr + 483, 0);
+        do Memory.poke(memAddr + 512, 0);
+        do Memory.poke(memAddr + 513, 0);
+        do Memory.poke(memAddr + 514, 0);
+        do Memory.poke(memAddr + 515, 0);
+        do Memory.poke(memAddr + 544, 0);
+        do Memory.poke(memAddr + 545, 0);
+        do Memory.poke(memAddr + 546, 0);
+        do Memory.poke(memAddr + 547, 0);
+        do Memory.poke(memAddr + 576, 0);
+        do Memory.poke(memAddr + 577, 0);
+        do Memory.poke(memAddr + 578, 0);
+        do Memory.poke(memAddr + 579, 0);
+        do Memory.poke(memAddr + 608, 0);
+        do Memory.poke(memAddr + 609, 0);
+        do Memory.poke(memAddr + 610, 0);
+        do Memory.poke(memAddr + 611, 0);
+        do Memory.poke(memAddr + 640, 0);
+        do Memory.poke(memAddr + 641, 0);
+        do Memory.poke(memAddr + 642, 0);
+        do Memory.poke(memAddr + 643, 0);
+        do Memory.poke(memAddr + 672, 0);
+        do Memory.poke(memAddr + 673, 0);
+        do Memory.poke(memAddr + 674, 0);
+        do Memory.poke(memAddr + 675, 0);
+        do Memory.poke(memAddr + 704, 0);
+        do Memory.poke(memAddr + 705, 0);
+        do Memory.poke(memAddr + 706, 0);
+        do Memory.poke(memAddr + 707, 0);
+        do Memory.poke(memAddr + 736, 0);
+        do Memory.poke(memAddr + 737, 0);
+        do Memory.poke(memAddr + 738, 0);
+        do Memory.poke(memAddr + 739, 0);
+        do Memory.poke(memAddr + 768, 0);
+        do Memory.poke(memAddr + 769, 0);
+        do Memory.poke(memAddr + 770, 0);
+        do Memory.poke(memAddr + 771, 0);
+        do Memory.poke(memAddr + 800, 0);
+        do Memory.poke(memAddr + 801, 0);
+        do Memory.poke(memAddr + 802, 0);
+        do Memory.poke(memAddr + 803, 0);
+        do Memory.poke(memAddr + 832, 0);
+        do Memory.poke(memAddr + 833, 0);
+        do Memory.poke(memAddr + 834, 0);
+        do Memory.poke(memAddr + 835, 0);
+        do Memory.poke(memAddr + 864, 0);
+        do Memory.poke(memAddr + 865, 0);
+        do Memory.poke(memAddr + 866, 0);
+        do Memory.poke(memAddr + 867, 0);
+        do Memory.poke(memAddr + 896, 0);
+        do Memory.poke(memAddr + 897, 0);
+        do Memory.poke(memAddr + 898, 0);
+        do Memory.poke(memAddr + 899, 0);
+        do Memory.poke(memAddr + 928, 0);
+        do Memory.poke(memAddr + 929, 0);
+        do Memory.poke(memAddr + 930, 0);
+        do Memory.poke(memAddr + 931, 0);
+        do Memory.poke(memAddr + 960, 0);
+        do Memory.poke(memAddr + 961, 0);
+        do Memory.poke(memAddr + 962, 0);
+        do Memory.poke(memAddr + 963, 0);
+        do Memory.poke(memAddr + 992, 0);
+        do Memory.poke(memAddr + 993, 0);
+        do Memory.poke(memAddr + 994, 0);
+        do Memory.poke(memAddr + 995, 0);
+        do Memory.poke(memAddr + 1024, 0);
+        do Memory.poke(memAddr + 1025, 0);
+        do Memory.poke(memAddr + 1026, 0);
+        do Memory.poke(memAddr + 1027, 0);
+        do Memory.poke(memAddr + 1056, 0);
+        do Memory.poke(memAddr + 1057, 0);
+        do Memory.poke(memAddr + 1058, 0);
+        do Memory.poke(memAddr + 1059, 0);
+        do Memory.poke(memAddr + 1088, 0);
+        do Memory.poke(memAddr + 1089, 0);
+        do Memory.poke(memAddr + 1090, 0);
+        do Memory.poke(memAddr + 1091, 0);
+        do Memory.poke(memAddr + 1120, 0);
+        do Memory.poke(memAddr + 1121, 0);
+        do Memory.poke(memAddr + 1122, 0);
+        do Memory.poke(memAddr + 1123, 0);
+        do Memory.poke(memAddr + 1152, 0);
+        do Memory.poke(memAddr + 1153, 0);
+        do Memory.poke(memAddr + 1154, 0);
+        do Memory.poke(memAddr + 1155, 0);
+        do Memory.poke(memAddr + 1184, 0);
+        do Memory.poke(memAddr + 1185, 0);
+        do Memory.poke(memAddr + 1186, 0);
+        do Memory.poke(memAddr + 1187, 0);
+        do Memory.poke(memAddr + 1216, 0);
+        do Memory.poke(memAddr + 1217, 0);
+        do Memory.poke(memAddr + 1218, 0);
+        do Memory.poke(memAddr + 1219, 0);
+        do Memory.poke(memAddr + 1248, 0);
+        do Memory.poke(memAddr + 1249, 0);
+        do Memory.poke(memAddr + 1250, 0);
+        do Memory.poke(memAddr + 1251, 0);
+        do Memory.poke(memAddr + 1280, 0);
+        do Memory.poke(memAddr + 1281, 0);
+        do Memory.poke(memAddr + 1282, 0);
+        do Memory.poke(memAddr + 1283, 0);
+        do Memory.poke(memAddr + 1312, 0);
+        do Memory.poke(memAddr + 1313, 0);
+        do Memory.poke(memAddr + 1314, 0);
+        do Memory.poke(memAddr + 1315, 0);
+        do Memory.poke(memAddr + 1344, 0);
+        do Memory.poke(memAddr + 1345, 0);
+        do Memory.poke(memAddr + 1346, 0);
+        do Memory.poke(memAddr + 1347, 0);
+        do Memory.poke(memAddr + 1376, 0);
+        do Memory.poke(memAddr + 1377, 0);
+        do Memory.poke(memAddr + 1378, 0);
+        do Memory.poke(memAddr + 1379, 0);
+        do Memory.poke(memAddr + 1408, 0);
+        do Memory.poke(memAddr + 1409, 0);
+        do Memory.poke(memAddr + 1410, 0);
+        do Memory.poke(memAddr + 1411, 0);
+        do Memory.poke(memAddr + 1440, 0);
+        do Memory.poke(memAddr + 1441, 0);
+        do Memory.poke(memAddr + 1442, 0);
+        do Memory.poke(memAddr + 1443, 0);
+        do Memory.poke(memAddr + 1472, 0);
+        do Memory.poke(memAddr + 1473, 0);
+        do Memory.poke(memAddr + 1474, 0);
+        do Memory.poke(memAddr + 1475, 0);
+        do Memory.poke(memAddr + 1504, 0);
+        do Memory.poke(memAddr + 1505, 0);
+        do Memory.poke(memAddr + 1506, 0);
+        do Memory.poke(memAddr + 1507, 0);
+        do Memory.poke(memAddr + 1536, 0);
+        do Memory.poke(memAddr + 1537, 0);
+        do Memory.poke(memAddr + 1538, 0);
+        do Memory.poke(memAddr + 1539, 0);
+        do Memory.poke(memAddr + 1568, 0);
+        do Memory.poke(memAddr + 1569, 0);
+        do Memory.poke(memAddr + 1570, 0);
+        do Memory.poke(memAddr + 1571, 0);
+        do Memory.poke(memAddr + 1600, 0);
+        do Memory.poke(memAddr + 1601, 0);
+        do Memory.poke(memAddr + 1602, 0);
+        do Memory.poke(memAddr + 1603, 0);
+        do Memory.poke(memAddr + 1632, 0);
+        do Memory.poke(memAddr + 1633, 0);
+        do Memory.poke(memAddr + 1634, 0);
+        do Memory.poke(memAddr + 1635, 0);
+        do Memory.poke(memAddr + 1664, 0);
+        do Memory.poke(memAddr + 1665, 0);
+        do Memory.poke(memAddr + 1666, 0);
+        do Memory.poke(memAddr + 1667, 0);
+        do Memory.poke(memAddr + 1696, 0);
+        do Memory.poke(memAddr + 1697, 0);
+        do Memory.poke(memAddr + 1698, 0);
+        do Memory.poke(memAddr + 1699, 0);
+        do Memory.poke(memAddr + 1728, 0);
+        do Memory.poke(memAddr + 1729, 0);
+        do Memory.poke(memAddr + 1730, 0);
+        do Memory.poke(memAddr + 1731, 0);
+        do Memory.poke(memAddr + 1760, 0);
+        do Memory.poke(memAddr + 1761, 0);
+        do Memory.poke(memAddr + 1762, 0);
+        do Memory.poke(memAddr + 1763, 0);
+        do Memory.poke(memAddr + 1792, 0);
+        do Memory.poke(memAddr + 1793, 0);
+        do Memory.poke(memAddr + 1794, 0);
+        do Memory.poke(memAddr + 1795, 0);
+        do Memory.poke(memAddr + 1824, 0);
+        do Memory.poke(memAddr + 1825, 0);
+        do Memory.poke(memAddr + 1826, 0);
+        do Memory.poke(memAddr + 1827, 0);
+        do Memory.poke(memAddr + 1856, 0);
+        do Memory.poke(memAddr + 1857, 0);
+        do Memory.poke(memAddr + 1858, 0);
+        do Memory.poke(memAddr + 1859, 0);
+        do Memory.poke(memAddr + 1888, 0);
+        do Memory.poke(memAddr + 1889, 0);
+        do Memory.poke(memAddr + 1890, 0);
+        do Memory.poke(memAddr + 1891, 0);
+        do Memory.poke(memAddr + 1920, 0);
+        do Memory.poke(memAddr + 1921, 0);
+        do Memory.poke(memAddr + 1922, 0);
+        do Memory.poke(memAddr + 1923, 0);
+        do Memory.poke(memAddr + 1952, 0);
+        do Memory.poke(memAddr + 1953, 0);
+        do Memory.poke(memAddr + 1954, 0);
+        do Memory.poke(memAddr + 1955, 0);
+}
+
+return;
+}
+
+
+	method boolean isJumping() {
+		return jumping;
+	}
+
+	method void increaseJumpStrength(){
+		let jumpStrength = jumpStrength + 1;
+		return;
+	}
+
+	method void decreaseJumpStrength(){
+		let jumpStrength = jumpStrength - 1;
+		return;
+	}
+
+	method void increaseWeight(){
+		let weight = weight + 1;
+		return;
+	}
+
+	method void decreaseWeight(){
+		if(weight > 1){
+			let weight = weight - 1;
+		}
+		return;
+	}
+
+	method boolean isHit(Cactus c){
+		var boolean hit;
+		var int cX;
+		var int cY;
+		var int cWidth;
+		var int cHeight;
+
+		let hit = false;
+		let cX = c.getCurrentPosition();
+		let cY = GROUND_HEIGHT - c.getHeight();
+		let cWidth = c.getWidth();
+		let cHeight = c.getHeight();
+
+		if((x < (cX+cWidth)) &
+      		((x+DINO_WIDTH) > cX) &
+			(currentHeight < (cY+cHeight)) &
+			((currentHeight+DINO_HEIGHT) > cY)){
+			let hit = true;
+		}
+
+		return hit;
+	}
+
+	method void startJump(){
+		if(~jumping){
+			let jumping = true;
+			let goingUp = true;
+			let currentJumpSpeed = jumpStrength;
+		}
+		return;
+	}
+
+	method void handleJump(){
+		do erase();
+
+		if(goingUp){
+			let currentHeight = currentHeight - currentJumpSpeed;
+			let currentJumpSpeed = currentJumpSpeed - weight;
+		}
+		else{
+			let currentHeight = currentHeight + currentJumpSpeed;
+			let currentJumpSpeed = currentJumpSpeed + weight;
+		}
+
+		if(currentJumpSpeed = 0){
+			let goingUp = false;
+		}
+		if(currentHeight > (GROUND_HEIGHT - DINO_HEIGHT - 1)){
+			let currentHeight = GROUND_HEIGHT - DINO_HEIGHT - 1;
+			let jumping = false;
+			let currentJumpSpeed = 0;
+		}
+
+		do draw();
+
+		return;
+	}
+
+}
